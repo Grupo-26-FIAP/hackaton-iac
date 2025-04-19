@@ -89,6 +89,19 @@ variable "cognito_password_temp" {
 
 
 
+variable "db_password" {
+  description = "Database password"
+  type        = string
+  sensitive   = true
+}
+
+variable "api_key" {
+  description = "API key"
+  type        = string
+  sensitive   = true
+}
+
+
 
 
 

@@ -1,6 +1,6 @@
-resource "kubernetes_service" "order_service_lb" {
+resource "kubernetes_service" "hackaton_notifier_service_lb" {
   metadata {
-    name      = "order-service"
+    name      = "hackaton-notifier-service"
     namespace = var.kubernetes_namespace
     annotations = {
       "service.beta.kubernetes.io/aws-load-balancer-type" : "nlb",
@@ -10,7 +10,7 @@ resource "kubernetes_service" "order_service_lb" {
   }
   spec {
     selector = {
-      app = "hackathon-order-deployment"
+      app = "hackaton-notifier-deployment"
     }
     port {
       port        = 80
@@ -20,9 +20,9 @@ resource "kubernetes_service" "order_service_lb" {
   }
 }
 
-resource "kubernetes_service" "product_catalog_service_lb" {
+resource "kubernetes_service" "hackaton_file_processor_service_lb" {
   metadata {
-    name      = "product-catalog-service"
+    name      = "hackaton-file-processor-service"
     namespace = var.kubernetes_namespace
     annotations = {
       "service.beta.kubernetes.io/aws-load-balancer-type" : "nlb",
@@ -32,7 +32,7 @@ resource "kubernetes_service" "product_catalog_service_lb" {
   }
   spec {
     selector = {
-      app = "hackathon-product-catalog-deployment"
+      app = "hackaton-file-processor-deployment"
     }
     port {
       port        = 80
@@ -42,9 +42,9 @@ resource "kubernetes_service" "product_catalog_service_lb" {
   }
 }
 
-resource "kubernetes_service" "payment_service_lb" {
+resource "kubernetes_service" "hackaton_file_manager_service_lb" {
   metadata {
-    name      = "payment-service"
+    name      = "hackaton-file-manager-service"
     namespace = var.kubernetes_namespace
     annotations = {
       "service.beta.kubernetes.io/aws-load-balancer-type" : "nlb",
@@ -54,7 +54,7 @@ resource "kubernetes_service" "payment_service_lb" {
   }
   spec {
     selector = {
-      app = "hackathon-payment-deployment"
+      app = "hackaton-file-manager-deployment"
     }
     port {
       port        = 80
@@ -74,12 +74,12 @@ resource "kubernetes_ingress_v1" "api_ingress" {
     rule {
       http {
         path {
-          path      = "/product"
+          path      = "/file-manager"
           path_type = "Prefix"
 
           backend {
             service {
-              name = kubernetes_service.product_catalog_service_lb.metadata[0].name
+              name = kubernetes_service.hackaton_file_manager_service_lb.metadata[0].name
               port {
                 number = 80
               }
@@ -87,26 +87,25 @@ resource "kubernetes_ingress_v1" "api_ingress" {
           }
         }
         path {
-          path      = "/order"
+          path      = "/file-processor"
           path_type = "Prefix"
 
           backend {
             service {
-              name = kubernetes_service.order_service_lb.metadata[0].name
+              name = kubernetes_service.hackaton_file_processor_service_lb.metadata[0].name
               port {
                 number = 80
               }
             }
           }
         }
-
         path {
-          path      = "/production"
+          path      = "/notifier"
           path_type = "Prefix"
 
           backend {
             service {
-              name = kubernetes_service.production_service_lb.metadata[0].name
+              name = kubernetes_service.hackaton_notifier_service_lb.metadata[0].name
               port {
                 number = 80
               }
@@ -119,23 +118,49 @@ resource "kubernetes_ingress_v1" "api_ingress" {
 
 }
 
-data "kubernetes_service" "product_catalog_service" {
+data "kubernetes_service" "file_manager_service" {
   metadata {
-    name      = kubernetes_service.product_catalog_service_lb.metadata[0].name
-    namespace = kubernetes_service.product_catalog_service_lb.metadata[0].namespace
+    name      = kubernetes_service.hackaton_file_manager_service_lb.metadata[0].name
+    namespace = kubernetes_service.hackaton_file_manager_service_lb.metadata[0].namespace
   }
 }
 
-data "kubernetes_service" "order_service" {
+data "kubernetes_service" "file_processor_service" {
   metadata {
-    name      = kubernetes_service.order_service_lb.metadata[0].name
-    namespace = kubernetes_service.order_service_lb.metadata[0].namespace
+    name      = kubernetes_service.hackaton_file_processor_service_lb.metadata[0].name
+    namespace = kubernetes_service.hackaton_file_processor_service_lb.metadata[0].namespace
   }
 }
 
-data "kubernetes_service" "payment_service" {
+data "kubernetes_service" "notifier_service" {
   metadata {
-    name      = kubernetes_service.payment_service_lb.metadata[0].name
-    namespace = kubernetes_service.payment_service_lb.metadata[0].namespace
+    name      = kubernetes_service.hackaton_notifier_service_lb.metadata[0].name
+    namespace = kubernetes_service.hackaton_notifier_service_lb.metadata[0].namespace
   }
 }
+
+resource "kubernetes_config_map" "hackaton_general_settings" {
+  metadata {
+    name      = "hackaton-general-settings"
+    namespace = var.kubernetes_namespace
+  }
+
+  data = {
+    APP_ENV   = "production"
+  }
+}
+
+resource "kubernetes_secret" "hackaton_secrets" {
+  metadata {
+    name      = "hackaton-secrets"
+    namespace = var.kubernetes_namespace
+  }
+
+  data = {
+    DB_PASSWORD = base64encode(var.db_password)
+    API_KEY     = base64encode(var.api_key)
+  }
+
+  type = "Opaque"
+}
+
