@@ -1,13 +1,6 @@
 
 resource "aws_cognito_user_pool" "hackathon_admin_pool" {
   name = "hackathon-admin-pool"
-
-   schema {
-    attribute_data_type = "String"
-    name                = "cpf"
-    mutable             = true
-  }
-
   schema {
     attribute_data_type = "String"
     name                = "name"
@@ -82,29 +75,6 @@ resource "aws_cognito_user_in_group" "add_user_in_group_adm" {
   username     = aws_cognito_user.admin_user.username
 }
 
-
-
-
-resource "aws_cognito_user" "prepline_user" {
-  user_pool_id = aws_cognito_user_pool.hackathon_admin_pool.id
-  username     = "cozinha@email.com"
-  attributes = {
-    email = "cozinha@email.com"
-  }
-  password   = var.cognito_password_temp
-  depends_on = [aws_cognito_user_pool.hackathon_admin_pool]
-}
-
-resource "aws_cognito_user_group" "gp_cozinha" {
-  user_pool_id = aws_cognito_user_pool.hackathon_admin_pool.id
-  name         = "Cozinha"
-}
-
-resource "aws_cognito_user_in_group" "add_user_in_group_cozinha" {
-  user_pool_id = aws_cognito_user_pool.hackathon_admin_pool.id
-  group_name   = aws_cognito_user_group.gp_cozinha.name
-  username     = aws_cognito_user.prepline_user.username
-}
 
 
 output "cognito_client_id" {

@@ -87,19 +87,42 @@ variable "cognito_password_temp" {
   default     = "cognito"
 }
 
-
-
-variable "db_password" {
-  description = "Database password"
+variable "mailtrap_host" {
   type        = string
-  sensitive   = true
+  default = "teste"
 }
 
-variable "api_key" {
-  description = "API key"
+variable "mailtrap_port" {
   type        = string
-  sensitive   = true
+  default = "teste"
 }
+
+variable "mailtrap_pass" {
+  type        = string
+  default = "teste"
+}
+
+variable "mailtrap_user" {
+  type        = string
+  default = "teste"
+}
+
+variable "aws_access_key_id" {
+  type        = string
+  default = "teste"
+}
+
+variable "aws_secret_access_key" {
+  type        = string
+  default = "teste"
+}
+
+variable "aws_session_token" {
+  type        = string
+  default = "teste"
+}
+
+
 
 
 

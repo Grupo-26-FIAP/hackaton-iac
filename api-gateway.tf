@@ -19,36 +19,36 @@ resource "aws_apigatewayv2_stage" "api_stage" {
 }
 
 
-data "aws_lb" "order_service_lb" {
+data "aws_lb" "hackaton_notifier_service_lb" {
   tags = {
-    "kubernetes.io/service-name" = "default/order-service"
+    "kubernetes.io/service-name" = "default/hackaton-notifier-service"
   }
 
-  depends_on = [kubernetes_service.order_service_lb]
+  depends_on = [kubernetes_service.hackaton_notifier_service_lb]
 }
 
-data "aws_lb_listener" "order_service_lb_listener" {
-  load_balancer_arn = data.aws_lb.order_service_lb.arn
+data "aws_lb_listener" "hackaton_notifier_service_lb_listener" {
+  load_balancer_arn = data.aws_lb.hackaton_notifier_service_lb.arn
   port              = 80
 
-  depends_on = [kubernetes_service.order_service_lb]
+  depends_on = [kubernetes_service.hackaton_notifier_service_lb]
 }
-resource "aws_apigatewayv2_route" "order_route" {
+resource "aws_apigatewayv2_route" "notifier_route" {
   api_id             = aws_apigatewayv2_api.http_api.id
-  route_key          = "ANY /order/{proxy+}"
-  target             = "integrations/${aws_apigatewayv2_integration.lb_orders_integration.id}"
+  route_key          = "ANY /notifier/{proxy+}"
+  target             = "integrations/${aws_apigatewayv2_integration.lb_notifier_integration.id}"
 
   lifecycle {
     prevent_destroy = false
   }
 
-  depends_on = [aws_apigatewayv2_integration.lb_orders_integration]
+  depends_on = [aws_apigatewayv2_integration.lb_notifier_integration]
 }
 
-resource "aws_apigatewayv2_integration" "lb_orders_integration" {
+resource "aws_apigatewayv2_integration" "lb_notifier_integration" {
   api_id             = aws_apigatewayv2_api.http_api.id
   integration_type   = "HTTP_PROXY"
-  integration_uri    = data.aws_lb_listener.order_service_lb_listener.arn
+  integration_uri    = data.aws_lb_listener.hackaton_notifier_service_lb_listener.arn
   integration_method = "ANY"
   connection_type    = "VPC_LINK"
   connection_id      = aws_apigatewayv2_vpc_link.vpc_link.id
@@ -57,40 +57,28 @@ resource "aws_apigatewayv2_integration" "lb_orders_integration" {
     prevent_destroy = false
   }
 
-  depends_on = [kubernetes_service.order_service_lb]
+  depends_on = [kubernetes_service.hackaton_notifier_service_lb]
 }
 
 
-data "aws_lb" "product_catalog_service_lb" {
+data "aws_lb" "hackaton_file_processor_service_lb" {
   tags = {
-    "kubernetes.io/service-name" = "default/product-catalog-service"
+    "kubernetes.io/service-name" = "default/hackaton-file-processor-service"
   }
 
-  depends_on = [kubernetes_service.product_catalog_service_lb]
+  depends_on = [kubernetes_service.hackaton_file_processor_service_lb]
 }
 
-data "aws_lb_listener" "product_catalog_service_lb_listener" {
-  load_balancer_arn = data.aws_lb.product_catalog_service_lb.arn
+data "aws_lb_listener" "hackaton_file_processor_service_lb_listener" {
+  load_balancer_arn = data.aws_lb.hackaton_file_processor_service_lb.arn
   port              = 80
 
-  depends_on = [kubernetes_service.product_catalog_service_lb]
+  depends_on = [kubernetes_service.hackaton_file_processor_service_lb]
 }
-resource "aws_apigatewayv2_route" "product_get_route" {
+resource "aws_apigatewayv2_route" "file_processor_route" {
   api_id    = aws_apigatewayv2_api.http_api.id
-  route_key = "GET /product/{proxy+}"
-  target    = "integrations/${aws_apigatewayv2_integration.lb_products_integration.id}"
-
-  lifecycle {
-    prevent_destroy = false
-  }
-
-  depends_on = [aws_apigatewayv2_integration.lb_products_integration]
-}
-
-resource "aws_apigatewayv2_route" "product_post_route" {
-  api_id             = aws_apigatewayv2_api.http_api.id
-  route_key          = "POST /product/{proxy+}"
-  target             = "integrations/${aws_apigatewayv2_integration.lb_products_integration.id}"
+  route_key = "ANY /file-processor/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.lb_file_processor_integration.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_authorizer.id
 
@@ -98,41 +86,13 @@ resource "aws_apigatewayv2_route" "product_post_route" {
     prevent_destroy = false
   }
 
-  depends_on = [aws_apigatewayv2_integration.lb_products_integration]
+  depends_on = [aws_apigatewayv2_integration.lb_file_processor_integration]
 }
 
-resource "aws_apigatewayv2_route" "product_put_route" {
-  api_id             = aws_apigatewayv2_api.http_api.id
-  route_key          = "PUT /product/{proxy+}"
-  target             = "integrations/${aws_apigatewayv2_integration.lb_products_integration.id}"
-  authorization_type = "CUSTOM"
-  authorizer_id      = aws_apigatewayv2_authorizer.lambda_authorizer.id
-
-  lifecycle {
-    prevent_destroy = false
-  }
-
-  depends_on = [aws_apigatewayv2_integration.lb_products_integration]
-}
-
-resource "aws_apigatewayv2_route" "product_delete_route" {
-  api_id             = aws_apigatewayv2_api.http_api.id
-  route_key          = "DELETE /product/{proxy+}"
-  target             = "integrations/${aws_apigatewayv2_integration.lb_products_integration.id}"
-  authorization_type = "CUSTOM"
-  authorizer_id      = aws_apigatewayv2_authorizer.lambda_authorizer.id
-
-  lifecycle {
-    prevent_destroy = false
-  }
-
-  depends_on = [aws_apigatewayv2_integration.lb_products_integration]
-}
-
-resource "aws_apigatewayv2_integration" "lb_products_integration" {
+resource "aws_apigatewayv2_integration" "lb_file_processor_integration" {
   api_id             = aws_apigatewayv2_api.http_api.id
   integration_type   = "HTTP_PROXY"
-  integration_uri    = data.aws_lb_listener.product_catalog_service_lb_listener.arn
+  integration_uri    = data.aws_lb_listener.hackaton_file_processor_service_lb_listener.arn
   integration_method = "ANY"
   connection_type    = "VPC_LINK"
   connection_id      = aws_apigatewayv2_vpc_link.vpc_link.id
@@ -141,38 +101,40 @@ resource "aws_apigatewayv2_integration" "lb_products_integration" {
     prevent_destroy = false
   }
 
-  depends_on = [kubernetes_service.product_catalog_service_lb]
+  depends_on = [kubernetes_service.hackaton_file_processor_service_lb]
 }
-data "aws_lb" "payment_service_lb" {
+
+
+data "aws_lb" "file_manager_service_lb" {
   tags = {
-    "kubernetes.io/service-name" = "default/payment-service"
+    "kubernetes.io/service-name" = "default/hackaton-file-manager-service"
   }
 
-  depends_on = [kubernetes_service.payment_service_lb]
+  depends_on = [kubernetes_service.hackaton_file_manager_service_lb]
 }
 
-data "aws_lb_listener" "payment_service_lb_listener" {
-  load_balancer_arn = data.aws_lb.payment_service_lb.arn
+data "aws_lb_listener" "file_manager_service_lb_listener" {
+  load_balancer_arn = data.aws_lb.file_manager_service_lb.arn
   port              = 80
 
-  depends_on = [kubernetes_service.payment_service_lb]
+  depends_on = [kubernetes_service.hackaton_file_manager_service_lb]
 }
 resource "aws_apigatewayv2_route" "payment_route" {
   api_id             = aws_apigatewayv2_api.http_api.id
-  route_key          = "ANY /payment/{proxy+}"
-  target             = "integrations/${aws_apigatewayv2_integration.lb_payment_integration.id}"
+  route_key          = "ANY /file-manager/{proxy+}"
+  target             = "integrations/${aws_apigatewayv2_integration.lb_file_manager_integration.id}"
 
   lifecycle {
     prevent_destroy = false
   }
 
-  depends_on = [aws_apigatewayv2_integration.lb_payment_integration]
+  depends_on = [aws_apigatewayv2_integration.lb_file_manager_integration]
 }
 
-resource "aws_apigatewayv2_integration" "lb_payment_integration" {
+resource "aws_apigatewayv2_integration" "lb_file_manager_integration" {
   api_id             = aws_apigatewayv2_api.http_api.id
   integration_type   = "HTTP_PROXY"
-  integration_uri    = data.aws_lb_listener.payment_service_lb_listener.arn
+  integration_uri    = data.aws_lb_listener.file_manager_service_lb_listener.arn
   integration_method = "ANY"
   connection_type    = "VPC_LINK"
   connection_id      = aws_apigatewayv2_vpc_link.vpc_link.id
@@ -181,66 +143,7 @@ resource "aws_apigatewayv2_integration" "lb_payment_integration" {
     prevent_destroy = false
   }
 
-  depends_on = [kubernetes_service.payment_service_lb]
-}
-
-
-data "aws_lb" "production_service_lb" {
-  tags = {
-    "kubernetes.io/service-name" = "default/production-service"
-  }
-
-  depends_on = [kubernetes_service.production_service_lb]
-}
-
-data "aws_lb_listener" "production_service_lb_listener" {
-  load_balancer_arn = data.aws_lb.production_service_lb.arn
-  port              = 80
-
-  depends_on = [kubernetes_service.production_service_lb]
-}
-resource "aws_apigatewayv2_route" "production_get_route" {
-  api_id             = aws_apigatewayv2_api.http_api.id
-  route_key          = "GET /production/{proxy+}"
-  target             = "integrations/${aws_apigatewayv2_integration.lb_production_integration.id}"
-
-  lifecycle {
-    prevent_destroy = false
-  }
-
-  depends_on = [aws_apigatewayv2_integration.lb_production_integration]
-}
-
-resource "aws_apigatewayv2_route" "production_put_route" {
-  api_id             = aws_apigatewayv2_api.http_api.id
-  route_key          = "PUT /production/{proxy+}"
-  target             = "integrations/${aws_apigatewayv2_integration.lb_production_integration.id}"
-  authorization_type = "CUSTOM"
-  authorizer_id      = aws_apigatewayv2_authorizer.lambda_authorizer.id
-
-  lifecycle {
-    prevent_destroy = false
-  }
-
-  depends_on = [aws_apigatewayv2_integration.lb_production_integration]
-}
-
-
-
-
-resource "aws_apigatewayv2_integration" "lb_production_integration" {
-  api_id             = aws_apigatewayv2_api.http_api.id
-  integration_type   = "HTTP_PROXY"
-  integration_uri    = data.aws_lb_listener.production_service_lb_listener.arn
-  integration_method = "ANY"
-  connection_type    = "VPC_LINK"
-  connection_id      = aws_apigatewayv2_vpc_link.vpc_link.id
-
-  lifecycle {
-    prevent_destroy = false
-  }
-
-  depends_on = [kubernetes_service.production_service_lb]
+  depends_on = [kubernetes_service.hackaton_file_manager_service_lb]
 }
 
 
@@ -288,20 +191,6 @@ resource "aws_lambda_permission" "allow_apigateway_signup" {
   source_arn = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*"
 }
 
-resource "aws_apigatewayv2_integration" "administrative_integration" {
-  api_id             = aws_apigatewayv2_api.http_api.id
-  integration_type   = "AWS_PROXY"
-  integration_uri    = aws_lambda_function.administrative.invoke_arn
-  payload_format_version = "2.0"
-}
-
-resource "aws_apigatewayv2_route" "administrative_route" {
-  api_id    = aws_apigatewayv2_api.http_api.id
-  route_key = "POST /administrative"
-
-  target = "integrations/${aws_apigatewayv2_integration.administrative_integration.id }"
-}
-
 resource "aws_apigatewayv2_authorizer" "lambda_authorizer" {
   api_id = aws_apigatewayv2_api.http_api.id
   name   = "lambda_authorizer"
@@ -317,14 +206,6 @@ resource "aws_lambda_permission" "allow_apigateway_authorizer" {
   function_name = aws_lambda_function.authorizer.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*"
-}
-
-resource "aws_lambda_permission" "allow_apigateway_administrative" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.administrative.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*"
 }
 
 resource "aws_apigatewayv2_vpc_link" "vpc_link" {

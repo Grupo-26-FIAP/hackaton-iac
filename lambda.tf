@@ -1,7 +1,7 @@
 
 resource "aws_lambda_function" "signIn" {
-  function_name = "lambda-signin"
-  role          = "arn:aws:iam::528038094654:role/LabRole"
+  function_name = "hack-signin"
+  role          = "arn:aws:iam::381491884526:role/LabRole"
   handler       = "index.handler"
   runtime       = "nodejs18.x"
   timeout          = 30
@@ -24,8 +24,8 @@ resource "aws_lambda_function" "signIn" {
 }
 
 resource "aws_lambda_function" "signUp" {
-  function_name = "lambda-signup"
-  role          = "arn:aws:iam::528038094654:role/LabRole"
+  function_name = "hack-signup"
+  role          = "arn:aws:iam::381491884526:role/LabRole"
   handler       = "index.handler"
   runtime       = "nodejs18.x"
   timeout          = 30
@@ -48,12 +48,12 @@ resource "aws_lambda_function" "signUp" {
 }
 
 resource "aws_lambda_function" "authorizer" {
-  function_name = "lambda-authorizer"
-  role          = "arn:aws:iam::528038094654:role/LabRole"
+  function_name = "hack-authorizer"
+  role          = "arn:aws:iam::381491884526:role/LabRole"
   handler       = "index.handler"
   runtime       = "nodejs18.x"
   timeout          = 30
-  filename      = "${path.module}/lambda-authorizer.zip"
+  filename      = "${path.module}/authorizer.zip"
 
   source_code_hash = filebase64sha256("${path.module}/authorizer.zip")
 
