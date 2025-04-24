@@ -151,6 +151,7 @@ resource "kubernetes_config_map" "hackaton_general_settings" {
     REDIS_HOST= var.redis_host
     REDIS_PORT= var.redis_port
     SQS_FILES_TO_PROCESS_URL= var.sqs_files_to_process_url
+    SQS_QUEUE_URL = var.sqs_queue_url
   }
 }
 

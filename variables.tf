@@ -135,6 +135,10 @@ variable sqs_files_to_process_url {
   type        = string
 }
 
+variable sqs_queue_url {
+  type        = string
+}
+
 
 
 

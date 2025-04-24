@@ -57,3 +57,4 @@ jobs:
           TF_VAR_redis_host: ${{ vars.REDIS_HOST }}
           TF_VAR_redis_port: ${{ vars.REDIS_PORT }}
           TF_VAR_sqs_files_to_process_url: ${{ vars.SQS_FILES_TO_PROCESS_URL }}
+          TF_VAR_sqs_queue_url : ${{ vars.SQS_QUEUE_URL }}
