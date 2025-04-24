@@ -146,7 +146,11 @@ resource "kubernetes_config_map" "hackaton_general_settings" {
   }
 
   data = {
-    APP_ENV   = "production"
+    AWS_REGION= var.aws_region
+    AWS_S3_BUCKET= var.aws_s3_bucket
+    REDIS_HOST= var.redis_host
+    REDIS_PORT= var.redis_port
+    SQS_FILES_TO_PROCESS_URL= var.sqs_files_to_process_url
   }
 }
 
@@ -157,15 +161,13 @@ resource "kubernetes_secret" "hackaton_secrets" {
   }
 
   data = {
-    MAILTRAP_HOST     = base64encode(var.mailtrap_host)
-    MAILTRAP_PORT     = base64encode(var.mailtrap_port)
-    MAILTRAP_PASS     = base64encode(var.mailtrap_pass)
-    MAILTRAP_USER     = base64encode(var.mailtrap_user)
-
-    AWS_REGION     = base64encode(var.aws_region)
+    MAILTRAP_HOST         = base64encode(var.mailtrap_host)
+    MAILTRAP_PORT         = base64encode(var.mailtrap_port)
+    MAILTRAP_PASS         = base64encode(var.mailtrap_pass)
+    MAILTRAP_USER         = base64encode(var.mailtrap_user)
     AWS_ACCESS_KEY_ID     = base64encode(var.aws_access_key_id)
     AWS_SECRET_ACCESS_KEY   = base64encode(var.aws_secret_access_key)
-    AWS_SESSION_TOKEN    = base64encode(var.aws_session_token)
+    AWS_SESSION_TOKEN     = base64encode(var.aws_session_token)
 
   }
 

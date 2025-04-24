@@ -84,43 +84,57 @@ variable "subnet_availability_zone_az_2" {
 
 variable "cognito_password_temp" {
   type        = string
+  sensitive = true
   default     = "cognito"
 }
 
 variable "mailtrap_host" {
   type        = string
-  default = "teste"
 }
 
 variable "mailtrap_port" {
   type        = string
-  default = "teste"
 }
 
 variable "mailtrap_pass" {
   type        = string
-  default = "teste"
 }
 
 variable "mailtrap_user" {
   type        = string
-  default = "teste"
 }
 
 variable "aws_access_key_id" {
   type        = string
-  default = "teste"
+  sensitive = true
 }
 
 variable "aws_secret_access_key" {
   type        = string
-  default = "teste"
+  sensitive = true
 }
 
 variable "aws_session_token" {
   type        = string
-  default = "teste"
+  sensitive = true
 }
+
+variable "aws_s3_bucket" {
+  type        = string
+}
+
+variable redis_host {
+  type        = string
+}
+
+variable redis_port {
+  type        = string
+}
+
+variable sqs_files_to_process_url {
+  type        = string
+}
+
 
 
 

@@ -41,11 +41,19 @@ jobs:
         id: validate
         run: terraform validate -no-color
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -out=tfplan -no-color -input=false
-        continue-on-error: true
-
       - name: Terraform Apply
         id: apply
         run: terraform apply -input=false -auto-approve
+        env:
+          TF_VAR_mailtrap_host: ${{ secrets.MAILTRAP_HOST }}
+          TF_VAR_mailtrap_port: ${{ secrets.MAILTRAP_PORT }}
+          TF_VAR_mailtrap_pass: ${{ secrets.MAILTRAP_PASS }}
+          TF_VAR_mailtrap_user: ${{ secrets.MAILTRAP_USER }}
+          TF_VAR_aws_access_key_id: ${{ secrets.ACCESS_KEY_ID }}
+          TF_VAR_aws_secret_access_key: ${{ secrets.SECRET_ACCESS_KEY }}
+          TF_VAR_aws_session_token: ${{ secrets.SESSION_TOKEN }}
+          TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+          TF_VAR_aws_s3_bucket: ${{ env.AWS_S3_BUCKET }}
+          TF_VAR_redis_host: ${{ env.REDIS_HOST }}
+          TF_VAR_redis_port: ${{ env.REDIS_PORT }}
+          TF_VAR_sqs_files_to_process_url: ${{ env.SQS_FILES_TO_PROCESS_URL }}
