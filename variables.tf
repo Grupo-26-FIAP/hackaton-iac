@@ -12,7 +12,7 @@ variable "kubernetes_namespace" {
 variable "cluster_name" {
   description = "Name of the EKS Cluster"
   type        = string
-  default     = "hackathon-eks"
+  default     = "hackaton-eks"
 }
 
 variable "instance_type" {
