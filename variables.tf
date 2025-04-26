@@ -169,10 +169,6 @@ variable "db_user" {
   sensitive = true
 }
 
-variable "db_password" {
-  type      = string
-  sensitive = true
-}
 
 
 
