@@ -169,19 +169,19 @@ resource "kubernetes_secret" "hackaton_secrets" {
   }
 
   data = {
-    MAILTRAP_HOST         = base64encode(var.mailtrap_host)
-    MAILTRAP_PORT         = base64encode(var.mailtrap_port)
-    MAILTRAP_PASS         = base64encode(var.mailtrap_pass)
-    MAILTRAP_USER         = base64encode(var.mailtrap_user)
-    AWS_ACCESS_KEY_ID     = base64encode(var.aws_access_key_id)
-    AWS_SECRET_ACCESS_KEY = base64encode(var.aws_secret_access_key)
-    AWS_SESSION_TOKEN     = base64encode(var.aws_session_token)
-    SESSION_TOKEN         = base64encode(var.aws_session_token)
-    DB_HOST               = base64encode(var.db_host)
-    DB_PORT               = base64encode(var.db_port)
-    DB_USERNAME           = base64encode(var.db_username)
-    DB_PASSWORD           = base64encode(var.db_password)
-    DB_DATABASE           = base64encode(var.db_database)
+    MAILTRAP_HOST         = var.mailtrap_host
+    MAILTRAP_PORT         = var.mailtrap_port
+    MAILTRAP_PASS         = var.mailtrap_pass
+    MAILTRAP_USER         = var.mailtrap_user
+    AWS_ACCESS_KEY_ID     = var.aws_access_key_id
+    AWS_SECRET_ACCESS_KEY = var.aws_secret_access_key
+    AWS_SESSION_TOKEN     = var.aws_session_token
+    SESSION_TOKEN         = var.aws_session_token
+    DB_HOST               = var.db_host
+    DB_PORT               = var.db_port
+    DB_USERNAME           = var.db_username
+    DB_PASSWORD           = var.db_password
+    DB_DATABASE           = var.db_database
 
   }
 
