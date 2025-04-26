@@ -82,6 +82,16 @@ variable "subnet_availability_zone_az_2" {
   default     = "us-east-1b"
 }
 
+variable "postgres_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "postgres_user" {
+  type      = string
+  sensitive = true
+}
+
 variable "cognito_password_temp" {
   type      = string
   sensitive = true
