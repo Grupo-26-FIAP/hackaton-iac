@@ -139,10 +139,6 @@ variable "redis_port" {
   type = string
 }
 
-variable "sqs_files_to_process_url" {
-  type = string
-}
-
 variable "db_username" {
   type      = string
   sensitive = true
