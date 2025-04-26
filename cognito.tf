@@ -18,7 +18,7 @@ resource "aws_cognito_user_pool" "hackathon_admin_pool" {
     allow_admin_create_user_only = false
   }
   password_policy {
-    minimum_length    = 6
+    minimum_length = 6
   }
   username_attributes      = []
   mfa_configuration        = "OFF"
@@ -78,18 +78,18 @@ resource "aws_cognito_user_in_group" "add_user_in_group_adm" {
 
 
 output "cognito_client_id" {
-  value = aws_cognito_user_pool_client.hackathon_client.id
+  value     = aws_cognito_user_pool_client.hackathon_client.id
   sensitive = true
 }
 
 output "cognito_client_secret" {
-  value = aws_cognito_user_pool_client.hackathon_client.client_secret
+  value     = aws_cognito_user_pool_client.hackathon_client.client_secret
   sensitive = true
 }
 
 
 output "cognito_user_pool_id" {
-  value = aws_cognito_user_pool.hackathon_admin_pool.id
+  value     = aws_cognito_user_pool.hackathon_admin_pool.id
   sensitive = true
 }
 

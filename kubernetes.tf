@@ -146,12 +146,19 @@ resource "kubernetes_config_map" "hackaton_general_settings" {
   }
 
   data = {
-    AWS_REGION= var.aws_region
-    AWS_S3_BUCKET= var.aws_s3_bucket
-    REDIS_HOST= var.redis_host
-    REDIS_PORT= var.redis_port
-    SQS_FILES_TO_PROCESS_URL= var.sqs_files_to_process_url
-    SQS_QUEUE_URL = var.sqs_queue_url
+    AWS_REGION                     = var.aws_region
+    AWS_S3_BUCKET                  = var.aws_s3_bucket
+    REDIS_HOST                     = var.redis_host
+    REDIS_PORT                     = var.redis_port
+    SQS_FILES_TO_PROCESS_URL       = var.sqs_files_to_process_url
+    SQS_QUEUE_URL                  = var.sqs_queue_url
+    AWS_S3_INPUT_BUCKET            = var.aws_s3_bucket
+    AWS_S3_OUTPUT_BUCKET           = var.aws_s3_bucket
+    FILES_TO_PROCESS_QUEUE_URL     = var.sqs_files_to_process_url
+    SQS_NOTIFICATION_QUEUE_URL     = var.sqs_notification_queue_url
+    SQS_ERROR_QUEUE_URL            = var.sqs_notification_queue_url
+    AWS_SQS_NOTIFICATION_QUEUE_URL = var.sqs_notification_queue_url
+
   }
 }
 
@@ -167,8 +174,13 @@ resource "kubernetes_secret" "hackaton_secrets" {
     MAILTRAP_PASS         = base64encode(var.mailtrap_pass)
     MAILTRAP_USER         = base64encode(var.mailtrap_user)
     AWS_ACCESS_KEY_ID     = base64encode(var.aws_access_key_id)
-    AWS_SECRET_ACCESS_KEY   = base64encode(var.aws_secret_access_key)
+    AWS_SECRET_ACCESS_KEY = base64encode(var.aws_secret_access_key)
     AWS_SESSION_TOKEN     = base64encode(var.aws_session_token)
+    DB_HOST               = base64encode(var.db_host)
+    DB_PORT               = base64encode(var.db_port)
+    DB_USERNAME           = base64encode(var.db_username)
+    DB_PASSWORD           = base64encode(var.db_password)
+    DB_DATABASE           = base64encode(var.db_database)
 
   }
 

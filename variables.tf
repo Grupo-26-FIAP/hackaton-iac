@@ -83,61 +83,100 @@ variable "subnet_availability_zone_az_2" {
 }
 
 variable "cognito_password_temp" {
-  type        = string
+  type      = string
   sensitive = true
-  default     = "cognito"
+  default   = "cognito"
 }
 
 variable "mailtrap_host" {
-  type        = string
+  type = string
 }
 
 variable "mailtrap_port" {
-  type        = string
+  type = string
 }
 
 variable "mailtrap_pass" {
-  type        = string
+  type = string
 }
 
 variable "mailtrap_user" {
-  type        = string
+  type = string
 }
 
 variable "aws_access_key_id" {
-  type        = string
+  type      = string
   sensitive = true
 }
 
 variable "aws_secret_access_key" {
-  type        = string
+  type      = string
   sensitive = true
 }
 
 variable "aws_session_token" {
-  type        = string
+  type      = string
   sensitive = true
 }
 
 variable "aws_s3_bucket" {
-  type        = string
+  type = string
 }
 
-variable redis_host {
-  type        = string
+variable "sqs_queue_url" {
+  type = string
 }
 
-variable redis_port {
-  type        = string
+variable "sqs_files_to_process_url" {
+  type = string
 }
 
-variable sqs_files_to_process_url {
-  type        = string
+variable "redis_host" {
+  type = string
 }
 
-variable sqs_queue_url {
-  type        = string
+variable "redis_port" {
+  type = string
 }
+
+variable "sqs_files_to_process_url" {
+  type = string
+}
+
+variable "sqs_notification_queue_url" {
+  type = string
+}
+
+variable "sqs_queue_url" {
+  type = string
+}
+
+variable "db_username" {
+  type      = string
+  sensitive = true
+}
+
+variable "db_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "db_database" {
+  type      = string
+  sensitive = true
+}
+
+variable "db_port" {
+  type      = string
+  sensitive = true
+}
+
+variable "db_host" {
+  type      = string
+  sensitive = true
+}
+
+
 
 
 

@@ -34,9 +34,9 @@ data "aws_lb_listener" "hackaton_notifier_service_lb_listener" {
   depends_on = [kubernetes_service.hackaton_notifier_service_lb]
 }
 resource "aws_apigatewayv2_route" "notifier_route" {
-  api_id             = aws_apigatewayv2_api.http_api.id
-  route_key          = "ANY /notifier/{proxy+}"
-  target             = "integrations/${aws_apigatewayv2_integration.lb_notifier_integration.id}"
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "ANY /notifier/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.lb_notifier_integration.id}"
 
   lifecycle {
     prevent_destroy = false
@@ -76,9 +76,9 @@ data "aws_lb_listener" "hackaton_file_processor_service_lb_listener" {
   depends_on = [kubernetes_service.hackaton_file_processor_service_lb]
 }
 resource "aws_apigatewayv2_route" "file_processor_route" {
-  api_id    = aws_apigatewayv2_api.http_api.id
-  route_key = "ANY /file-processor/{proxy+}"
-  target    = "integrations/${aws_apigatewayv2_integration.lb_file_processor_integration.id}"
+  api_id             = aws_apigatewayv2_api.http_api.id
+  route_key          = "ANY /file-processor/{proxy+}"
+  target             = "integrations/${aws_apigatewayv2_integration.lb_file_processor_integration.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_authorizer.id
 
@@ -120,9 +120,9 @@ data "aws_lb_listener" "file_manager_service_lb_listener" {
   depends_on = [kubernetes_service.hackaton_file_manager_service_lb]
 }
 resource "aws_apigatewayv2_route" "payment_route" {
-  api_id             = aws_apigatewayv2_api.http_api.id
-  route_key          = "ANY /file-manager/{proxy+}"
-  target             = "integrations/${aws_apigatewayv2_integration.lb_file_manager_integration.id}"
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "ANY /file-manager/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.lb_file_manager_integration.id}"
 
   lifecycle {
     prevent_destroy = false
@@ -148,9 +148,9 @@ resource "aws_apigatewayv2_integration" "lb_file_manager_integration" {
 
 
 resource "aws_apigatewayv2_integration" "signin_integration" {
-  api_id             = aws_apigatewayv2_api.http_api.id
-  integration_type   = "AWS_PROXY"
-  integration_uri    = aws_lambda_function.signIn.invoke_arn
+  api_id                 = aws_apigatewayv2_api.http_api.id
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.signIn.invoke_arn
   payload_format_version = "2.0"
 }
 
@@ -166,13 +166,13 @@ resource "aws_lambda_permission" "allow_apigateway_signin" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.signIn.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*"
+  source_arn    = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*"
 }
 
 resource "aws_apigatewayv2_integration" "signup_integration" {
-  api_id             = aws_apigatewayv2_api.http_api.id
-  integration_type   = "AWS_PROXY"
-  integration_uri    = aws_lambda_function.signUp.invoke_arn
+  api_id                 = aws_apigatewayv2_api.http_api.id
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.signUp.invoke_arn
   payload_format_version = "2.0"
 }
 
@@ -188,15 +188,15 @@ resource "aws_lambda_permission" "allow_apigateway_signup" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.signUp.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*"
+  source_arn    = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*"
 }
 
 resource "aws_apigatewayv2_authorizer" "lambda_authorizer" {
-  api_id = aws_apigatewayv2_api.http_api.id
-  name   = "lambda_authorizer"
-  authorizer_type = "REQUEST"
-  authorizer_uri  = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/${aws_lambda_function.authorizer.arn}/invocations"
-  identity_sources = ["$request.header.authorization"]
+  api_id                            = aws_apigatewayv2_api.http_api.id
+  name                              = "lambda_authorizer"
+  authorizer_type                   = "REQUEST"
+  authorizer_uri                    = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/${aws_lambda_function.authorizer.arn}/invocations"
+  identity_sources                  = ["$request.header.authorization"]
   authorizer_payload_format_version = "2.0"
 }
 

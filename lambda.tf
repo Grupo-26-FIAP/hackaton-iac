@@ -4,16 +4,16 @@ resource "aws_lambda_function" "signIn" {
   role          = "arn:aws:iam::381491884526:role/LabRole"
   handler       = "index.handler"
   runtime       = "nodejs18.x"
-  timeout          = 30
+  timeout       = 30
   filename      = "${path.module}/signin.zip"
 
   source_code_hash = filebase64sha256("${path.module}/signin.zip")
 
-   environment {
+  environment {
     variables = {
-      AWS_COGNITO_REGION  = var.aws_region
+      AWS_COGNITO_REGION       = var.aws_region
       AWS_COGNITO_USER_POOL_ID = aws_cognito_user_pool.hackathon_admin_pool.id
-      AWS_COGNITO_CLIENT_ID = aws_cognito_user_pool_client.hackathon_client.id
+      AWS_COGNITO_CLIENT_ID    = aws_cognito_user_pool_client.hackathon_client.id
     }
   }
 
@@ -28,16 +28,16 @@ resource "aws_lambda_function" "signUp" {
   role          = "arn:aws:iam::381491884526:role/LabRole"
   handler       = "index.handler"
   runtime       = "nodejs18.x"
-  timeout          = 30
+  timeout       = 30
   filename      = "${path.module}/signup.zip"
 
   source_code_hash = filebase64sha256("${path.module}/signup.zip")
 
-    environment {
+  environment {
     variables = {
-      AWS_COGNITO_REGION  = var.aws_region
+      AWS_COGNITO_REGION       = var.aws_region
       AWS_COGNITO_USER_POOL_ID = aws_cognito_user_pool.hackathon_admin_pool.id
-      AWS_COGNITO_CLIENT_ID = aws_cognito_user_pool_client.hackathon_client.id
+      AWS_COGNITO_CLIENT_ID    = aws_cognito_user_pool_client.hackathon_client.id
     }
   }
 
@@ -52,16 +52,16 @@ resource "aws_lambda_function" "authorizer" {
   role          = "arn:aws:iam::381491884526:role/LabRole"
   handler       = "index.handler"
   runtime       = "nodejs18.x"
-  timeout          = 30
+  timeout       = 30
   filename      = "${path.module}/authorizer.zip"
 
   source_code_hash = filebase64sha256("${path.module}/authorizer.zip")
 
-    environment {
+  environment {
     variables = {
-      AWS_COGNITO_REGION  = var.aws_region
+      AWS_COGNITO_REGION       = var.aws_region
       AWS_COGNITO_USER_POOL_ID = aws_cognito_user_pool.hackathon_admin_pool.id
-      AWS_COGNITO_CLIENT_ID = aws_cognito_user_pool_client.hackathon_client.id
+      AWS_COGNITO_CLIENT_ID    = aws_cognito_user_pool_client.hackathon_client.id
     }
   }
 

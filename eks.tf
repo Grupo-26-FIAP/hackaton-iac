@@ -10,7 +10,7 @@ resource "aws_eks_cluster" "hackathon_cluster" {
       aws_subnet.hackathon_private_subnet_1.id,
       aws_subnet.hackathon_private_subnet_2.id
     ]
-    
+
     security_group_ids = [aws_security_group.eks_security_group.id]
   }
 
@@ -28,8 +28,8 @@ resource "aws_eks_node_group" "hackathon_node_group" {
   cluster_name    = var.cluster_name
   node_group_name = "hackathon_node_group"
   node_role_arn   = data.aws_iam_role.labrole.arn
-  subnet_ids      = [
-    aws_subnet.hackathon_private_subnet_1.id, 
+  subnet_ids = [
+    aws_subnet.hackathon_private_subnet_1.id,
     aws_subnet.hackathon_private_subnet_2.id
   ]
 
@@ -54,12 +54,12 @@ resource "aws_eks_node_group" "hackathon_node_group" {
   }
 
   tags = {
-    Name        = "hackathon_node_group"
+    Name = "hackathon_node_group"
   }
 }
 
 resource "aws_security_group" "eks_security_group" {
-  vpc_id = aws_vpc.hackathon_vpc.id
+  vpc_id      = aws_vpc.hackathon_vpc.id
   description = "Allow traffic for EKS Cluster (hackathon)"
 
   ingress {
@@ -77,6 +77,6 @@ resource "aws_security_group" "eks_security_group" {
   }
 
   tags = {
-    Name        = "${var.cluster_name}-sg"
+    Name = "${var.cluster_name}-sg"
   }
 }
