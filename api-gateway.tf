@@ -79,8 +79,6 @@ resource "aws_apigatewayv2_route" "file_processor_route" {
   api_id             = aws_apigatewayv2_api.http_api.id
   route_key          = "ANY /file-processor/{proxy+}"
   target             = "integrations/${aws_apigatewayv2_integration.lb_file_processor_integration.id}"
-  authorization_type = "CUSTOM"
-  authorizer_id      = aws_apigatewayv2_authorizer.lambda_authorizer.id
 
   lifecycle {
     prevent_destroy = false

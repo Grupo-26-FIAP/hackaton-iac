@@ -176,6 +176,7 @@ resource "kubernetes_secret" "hackaton_secrets" {
     AWS_ACCESS_KEY_ID     = base64encode(var.aws_access_key_id)
     AWS_SECRET_ACCESS_KEY = base64encode(var.aws_secret_access_key)
     AWS_SESSION_TOKEN     = base64encode(var.aws_session_token)
+    SESSION_TOKEN         = base64encode(var.aws_session_token)
     DB_HOST               = base64encode(var.db_host)
     DB_PORT               = base64encode(var.db_port)
     DB_USERNAME           = base64encode(var.db_username)
