@@ -170,6 +170,12 @@ variable "db_host" {
   sensitive = true
 }
 
+variable "db_password" {
+  type      = string
+  sensitive = true
+}
+
+
 variable "sqs_notification_queue_url" {
   type = string
 }

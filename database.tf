@@ -1,5 +1,5 @@
 resource "aws_db_instance" "video_processor_db" {
-  identifier               = "video_processor"
+  identifier               = "video-processor"
   allocated_storage        = 20
   max_allocated_storage    = 100
   engine                   = "postgres"
